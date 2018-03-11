@@ -1,0 +1,3 @@
+[submodule ".common-lisp/impl-systems/sbcl/sbcl-readline"]
+	path = .common-lisp/impl-systems/sbcl/sbcl-readline
+	url = git://jini-zh.org/sbcl-readline

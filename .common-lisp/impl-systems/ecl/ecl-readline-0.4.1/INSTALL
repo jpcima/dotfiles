@@ -1,0 +1,20 @@
+
+1. Download the latest version.
+
+
+2. Unpack the tar file in the directory where you want to install it.
+   
+   tar --gzip -xvf ecl-readline-X.X.X.tar.gz
+
+
+2. Create a symbolic link in your ASDF central registry to ecl-readline.asd.
+
+   ln -s /path/to/cl/ecl-readline-X.X.X/ecl-readline.asd /path/to/cl/asdf/site-systems/ecl-readline.asd
+
+
+3. Start ecl and compile and load the code, then enable readline support. The default history file location
+   is $HOME/.ecl-history and the default history size is 100 entries.
+
+   (require 'asdf)
+   (asdf:operate 'asdf:load-op 'ecl-readline)
+   (ecl-readline::enable)

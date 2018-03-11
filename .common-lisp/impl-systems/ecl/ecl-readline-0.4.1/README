@@ -1,0 +1,28 @@
+Package: ECL-READLINE
+Author : Jason Aquilina
+
+Summary
+=======
+ECL-READLINE provides top-level readline support for ECL (Embeddable Common-Lisp) in the form of an ASDF package. It does
+this by creating a CLOS input-stream that wraps around the Readline library.
+
+
+Using
+=====
+From the top level (or in your .eclrc file)
+
+    (require 'asdf)
+    (asdf:operate 'asdf:load-op 'ecl-readline)
+    (ecl-readline::enable)
+
+Customisation
+=============
+ecl-readline::enable takes two keyword arguments:
+
+    :history-file
+    The name of the file for the session history - defaults to $HOME/.ecl-history.
+
+    :history-size
+    The number of history entries to keep - defaults to 100 lines
+
+ 

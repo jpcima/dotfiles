@@ -1,5 +1,14 @@
 autoload -Uz promptinit && promptinit
 prompt walters green
+PS1=$(sed 's/%n/%F{blue}%n%f/g' <<< "$PS1")
+PS1=$(sed 's/%m/%F{magenta}%m%f/g' <<< "$PS1")
+
+autoload -Uz vcs_info
+zstyle ':vcs_info:*' enable git
+
+setopt prompt_subst
+precmd() { vcs_info }
+RPS1="$RPS1 "$'%F{blue}${vcs_info_msg_0_}%f'
 
 # for linux console and RH/Debian xterm
 bindkey "\e[1~" beginning-of-line

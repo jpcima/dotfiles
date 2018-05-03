@@ -3,7 +3,7 @@
 ;;; Code:
 
 ;; Packages
-(package-initialize)
+(require 'package)
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
 
 ;; Window management
@@ -19,6 +19,10 @@
 ;; Window management keys
 (global-set-key (kbd "M-<left>") 'jpc/select-previous-window)
 (global-set-key (kbd "M-<right>") 'jpc/select-next-window)
+
+;; Mouse wheel
+(global-set-key (kbd "<C-mouse-4>") 'text-scale-decrease)
+(global-set-key (kbd "<C-mouse-5>") 'text-scale-increase)
 
 ;; Smart tab
 (require 'smart-tab)
@@ -66,6 +70,18 @@
   (set (make-local-variable 'company-backends) backends)
   (local-set-key (kbd "C-SPC") 'company-complete))
 
+;; Company workaround for fci-mode (#180)
+(defvar-local jpc/company-fci-mode-on-p nil)
+(defun jpc/company-turn-off-fci (&rest ignore)
+  (when (boundp 'fci-mode)
+    (setq jpc/company-fci-mode-on-p fci-mode)
+    (when fci-mode (fci-mode -1))))
+(defun jpc/company-maybe-turn-on-fci (&rest ignore)
+  (when jpc/company-fci-mode-on-p (fci-mode 1)))
+(add-hook 'company-completion-started-hook 'jpc/company-turn-off-fci)
+(add-hook 'company-completion-finished-hook 'jpc/company-maybe-turn-on-fci)
+(add-hook 'company-completion-cancelled-hook 'jpc/company-maybe-turn-on-fci)
+
 ;; Company for Emacs Lisp
 (require 'company-elisp)
 (defun jpc/company-elisp-mode-hookfn ()
@@ -110,7 +126,7 @@
 (add-hook 'c++-mode-hook 'jpc/flycheck-c-mode-hookfn)
 
 ;; Irony default flags for C and C++
-(defun irony-cdb-my-default-flags (command &rest args)
+(defun jpc/irony-cdb-my-default-flags (command &rest args)
   "Run compilation database COMMAND with arguments ARGS.
 This database provides default flags for C and C++."
   (let ((wdir (file-name-directory (buffer-file-name))))
@@ -119,7 +135,7 @@ This database provides default flags for C and C++."
        (cl-case major-mode
          (c-mode `((("-std=gnu11") . ,wdir)))
          (c++-mode `((("-std=gnu++17") . ,wdir))))))))
-(add-to-list 'irony-cdb-compilation-databases 'irony-cdb-my-default-flags t)
+(add-to-list 'irony-cdb-compilation-databases 'jpc/irony-cdb-my-default-flags t)
 
 ;; D language
 (require 'flycheck-dmd-dub)
@@ -132,8 +148,31 @@ This database provides default flags for C and C++."
   (jpc/company-local-key-enable '(company-dcd)))
 (add-hook 'd-mode-hook 'jpc/company-d-mode-hookfn)
 
+;; Text
+(require 'emojify)
+(require 'company-emoji)
+(defun jpc/company-text-mode-hookfn ()
+  (interactive)
+  (emojify-mode 1)
+  (jpc/company-local-key-enable '(company-emoji)))
+(add-hook 'text-mode-hook 'jpc/company-text-mode-hookfn)
+
 ;; Puredata
 (jpc/dired-omit-add "\\.pd_linux$\\|\\.pd_darwin$")
+
+;; Common Lisp
+(require 'slime)
+(require 'slime-company)
+(defun jpc/company-lisp-mode-hookfn ()
+  "Set up company hook for Lisp."
+  (interactive)
+  (jpc/company-local-key-enable '(company-slime)))
+(when (load (expand-file-name "~/.common-lisp/quicklisp/slime-helper.el") t)
+  (setq slime-lisp-implementations
+        '((sbcl ("sbcl"))
+          (sbcl-core ("sbcl-core")))
+        slime-default-lisp 'sbcl-core)
+  (add-hook 'lisp-mode-hook 'jpc/company-lisp-mode-hookfn))
 
 ;; Enable some functions
 (put 'downcase-region 'disabled nil)
@@ -141,6 +180,15 @@ This database provides default flags for C and C++."
 
 ;; Shortcut for yes/no questions
 (defalias 'yes-or-no-p 'y-or-n-p)
+
+;; Date and time
+(require 'calendar)
+(defun jpc/insert-current-date (&optional omit-day-of-week-p)
+  "Insert today's date using the current locale.
+With a prefix argument, the date is inserted without the day of the week."
+  (interactive "P*")
+  (insert (calendar-date-string (calendar-current-date) nil omit-day-of-week-p)))
+(global-set-key "\C-x\M-d" 'jpc/insert-current-date)
 
 ;; Load theme
 (load-theme 'tango)
@@ -155,12 +203,11 @@ This database provides default flags for C and C++."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(c-default-style
-   (quote
-    ((c-mode . "stroustrup")
+   '((c-mode . "stroustrup")
      (c++-mode . "stroustrup")
      (java-mode . "java")
      (awk-mode . "awk")
-     (other . "gnu"))))
+     (other . "gnu")))
  '(column-number-mode t)
  '(cua-mode t nil (cua-base))
  '(dired-listing-switches "-al --group-directories-first")
@@ -172,14 +219,21 @@ This database provides default flags for C and C++."
  '(indent-tabs-mode nil)
  '(make-backup-files nil)
  '(package-selected-packages
-   (quote
-    (pkgbuild-mode julia-mode auctex company-dcd flycheck-dmd-dub d-mode fill-column-indicator company-irony-c-headers flycheck-irony flycheck cmake-mode company-irony irony company smart-tab)))
+   '(slime-company company-emoji emojify slime spaceline powerline svg-mode-line-themes yaml-mode pkgbuild-mode julia-mode auctex company-dcd flycheck-dmd-dub d-mode fill-column-indicator company-irony-c-headers flycheck-irony flycheck cmake-mode company-irony irony company smart-tab))
  '(require-final-newline t)
  '(scroll-bar-mode nil)
  '(show-paren-mode t)
  '(show-trailing-whitespace t)
+ '(slime-auto-start 'always)
  '(tool-bar-mode nil)
  '(transient-mark-mode t)
- '(whitespace-style (quote (face trailing tab-mark))))
+ '(whitespace-style '(face trailing tab-mark)))
+
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
 
 ;;; init.el ends here

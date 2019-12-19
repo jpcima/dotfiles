@@ -63,6 +63,7 @@ zstyle ':completion:*' menu select
 zstyle ':completion:*' verbose yes
 zstyle ':completion:*' accept-exact '*(N)'
 zstyle ':completion:*' list-colors ''
+zstyle ':completion:*' rehash true
 
 if test -f "/usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ; then 
   . "/usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"

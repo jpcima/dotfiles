@@ -54,8 +54,6 @@ function colorcat() {
   fi
 }
 
-export WINEPREFIX="$HOME/.wine/temp32"
-export WINEARCH="win32"
 export WINEDLLOVERRIDES="winemenubuilder.exe=d"
 
 function use_gcc() {

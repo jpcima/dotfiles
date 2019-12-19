@@ -190,6 +190,10 @@ With a prefix argument, the date is inserted without the day of the week."
   (insert (calendar-date-string (calendar-current-date) nil omit-day-of-week-p)))
 (global-set-key "\C-x\M-d" 'jpc/insert-current-date)
 
+;; Colors
+(require 'rainbow-identifiers)
+(add-hook 'prog-mode-hook (lambda () (rainbow-identifiers-mode t)))
+
 ;; Load theme
 (load-theme 'tango)
 
@@ -219,7 +223,7 @@ With a prefix argument, the date is inserted without the day of the week."
  '(indent-tabs-mode nil)
  '(make-backup-files nil)
  '(package-selected-packages
-   '(slime-company company-emoji emojify slime spaceline powerline svg-mode-line-themes yaml-mode pkgbuild-mode julia-mode auctex company-dcd flycheck-dmd-dub d-mode fill-column-indicator company-irony-c-headers flycheck-irony flycheck cmake-mode company-irony irony company smart-tab))
+   '(rainbow-identifiers slime-company company-emoji emojify slime spaceline powerline svg-mode-line-themes yaml-mode pkgbuild-mode julia-mode auctex company-dcd flycheck-dmd-dub d-mode fill-column-indicator company-irony-c-headers flycheck-irony flycheck cmake-mode company-irony irony company smart-tab))
  '(require-final-newline t)
  '(scroll-bar-mode nil)
  '(show-paren-mode t)

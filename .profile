@@ -7,7 +7,7 @@ test "$TERM" = "xterm" && export TERM=xterm-256color
 
 export WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
 
-export PATH="$HOME/Documents/LocalPrefix/bin:$PATH"
+export PATH="$HOME/local/bin:$PATH"
 
 LSFLAGS="--group-directories-first --color=auto -p"
 alias l="ls $LSFLAGS"
@@ -72,7 +72,7 @@ function cmake() {
     esac
 }
 
-export LV2_PATH="/usr/local/lib/lv2:/usr/lib/lv2:$HOME/.lv2"
+export LV2_PATH="/usr/local/lib/lv2:/usr/lib/lv2:$HOME/local/lib/lv2:$HOME/.lv2"
 
 # Github configuration
 github_ssh_key=jpcima

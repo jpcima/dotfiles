@@ -63,7 +63,7 @@ function use_clang() {
   export CC=clang CXX=clang++
 }
 
-CMAKEFLAGS="-G Ninja -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo"
+CMAKEFLAGS="-DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo"
 function cmake() {
     local cmd="/usr/bin/cmake"
     case "$1" in

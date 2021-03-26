@@ -3,6 +3,17 @@
   ci = commit
   st = status
   br = branch
+  cp = cherry-pick
   hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
   type = cat-file -t
   dump = cat-file -p
+[user]
+	email = jp-dev@inbox.ru
+	name = Jean Pierre Cimalando
+	signingkey = 6CAA34BF5804E79F
+[pull]
+	rebase = false
+[github]
+	user = jpcima
+[init]
+	defaultBranch = master

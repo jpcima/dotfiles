@@ -253,3 +253,16 @@
 (defun jpc/after-load-theme/flycheck-posframe ()
   (set-face-attribute 'flycheck-posframe-border-face nil :foreground (face-attribute 'shadow :foreground nil t)))
 (add-hook 'doom-load-theme-hook #'jpc/after-load-theme/flycheck-posframe)
+
+;; Faust language
+(add-to-list 'auto-mode-alist '("/faust/[^/]+\\.lib\\'" . faust-mode))
+
+;; Date and time
+(defun jpc/insert-rfc-date ()
+  "Insert the current date in RFC 5322 format."
+  (interactive)
+  (insert (string-trim (shell-command-to-string "date -R"))))
+(defun jpc/insert-iso-date ()
+  "Insert the current date in ISO format."
+  (interactive)
+  (insert (string-trim (shell-command-to-string "env LANG=C date -u"))))

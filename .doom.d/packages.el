@@ -28,6 +28,8 @@
 
 (package! pkgbuild-mode)
 
+(package! ttl-mode)
+
 (package! sfz-mode)
 
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:

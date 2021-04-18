@@ -95,6 +95,10 @@
 
 ;; Line numbers
 (global-set-key (kbd "C-l") 'doom/toggle-line-numbers)
+(defadvice doom/toggle-line-numbers
+    (after jpc/doom/skip-relative-line-numbers activate)
+  (when (eq display-line-numbers 'relative)
+    (doom/toggle-line-numbers)))
 
 ;; Whitespace
 (require 'whitespace)

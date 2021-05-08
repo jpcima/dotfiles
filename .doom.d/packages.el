@@ -19,6 +19,10 @@
 (package! smart-tab)
 (package! rainbow-identifiers)
 (package! spaceline)
+(package! spaceline-all-the-icons)
+(package! anzu)
+
+;(package! company-box)
 
 (package! meson-mode)
 
@@ -29,7 +33,7 @@
 (package! pkgbuild-mode)
 
 (package! ttl-mode)
-
+(package! iss-mode)
 (package! sfz-mode)
 
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:

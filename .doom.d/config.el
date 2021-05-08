@@ -82,16 +82,19 @@
 (global-set-key (kbd "M-<right>") 'jpc/select-next-window)
 
 ;; Window management keys
-(require 'windmove)
-(setq windmove-wrap-around t)
-(global-set-key (kbd "M-<up>") 'windmove-up)
-(global-set-key (kbd "M-<down>") 'windmove-down)
-;;(global-set-key (kbd "M-<left>") 'windmove-left)
-;;(global-set-key (kbd "M-<right>") 'windmove-right)
+(use-package! windmove
+  :config (progn (setq windmove-wrap-around t)
+                 ;(global-set-key (kbd "M-<left>") 'windmove-left)
+                 ;(global-set-key (kbd "M-<right>") 'windmove-right)
+                 (global-set-key (kbd "M-<up>") 'windmove-up)
+                 (global-set-key (kbd "M-<down>") 'windmove-down)))
 
 ;; Company
 (add-hook 'company-mode-hook
           (lambda () (local-set-key (kbd "C-SPC") 'company-complete)))
+;; Company box
+;(use-package company-box
+;  :hook (company-mode . company-box-mode))
 
 ;; Line numbers
 (global-set-key (kbd "C-l") 'doom/toggle-line-numbers)
@@ -123,8 +126,8 @@
 (add-to-list 'default-frame-alist '(alpha . (99 . 99)))
 
 ;; Smart tab
-(require 'smart-tab)
-(global-smart-tab-mode t)
+(use-package! smart-tab
+  :config (global-smart-tab-mode t))
 
 ;; Disable electric things
 (setq electric-indent-mode nil)
@@ -165,8 +168,25 @@
 (put 'upcase-region 'disabled nil)
 
 ;; Spaceline
-(require 'spaceline-config)
-(spaceline-emacs-theme)
+(use-package! anzu
+  :config (global-anzu-mode 1))
+(use-package! spaceline-config
+  ;:config (spaceline-emacs-theme)
+  )
+(use-package! spaceline-all-the-icons
+  :after spaceline-config
+  :after anzu
+  :config (progn
+            (setq spaceline-all-the-icons-icon-set-modified 'toggle)
+            (setq spaceline-all-the-icons-slim-render t)
+            (spaceline-toggle-all-the-icons-time-off)
+            (spaceline-toggle-all-the-icons-buffer-position-on)
+            (spaceline-all-the-icons--setup-anzu)
+            (spaceline-all-the-icons-theme 'buffer-position 'buffer-encoding-abbrev)))
+
+(use-package! spaceline-all-the-icons
+  :after spaceline-config
+  :config (spaceline-all-the-icons-theme))
 
 ;; CC mode style
 (defun jpc/setup-cc-style ()
@@ -183,8 +203,8 @@
   (add-hook hook 'jpc/setup-cc-style))
 
 ;; EditorConfig
-(require 'editorconfig)
-(editorconfig-mode 1)
+(use-package! editorconfig
+  :config (editorconfig-mode 1))
 (defadvice editorconfig-set-trailing-ws
     (around jpc/editorconfig-set-trailing-ws activate)
   "Disallow EditorConfig to mess with trailing whitespace.")
@@ -193,8 +213,8 @@
 (setq confirm-kill-emacs nil)
 
 ;; Ibuffer
-(require 'ibuffer)
-(global-set-key (kbd "C-x C-b") #'ibuffer)
+(use-package! ibuffer
+  :config (global-set-key (kbd "C-x C-b") #'ibuffer))
 
 ;; Subword
 (global-subword-mode t)
@@ -236,14 +256,14 @@
   (interactive)
   (let ((default-directory (projectile-compilation-dir)))
     (+eshell/toggle nil (projectile-compilation-command default-directory))))
-(global-set-key (kbd "<f5>") #'jpc/run-project-in-eshell)
-(global-set-key (kbd "<f6>") #'jpc/test-project-in-eshell)
-(global-set-key (kbd "<f7>") #'jpc/compile-project-in-eshell)
 
 ;; Eshell
-(require 'eshell)
-(setq eshell-history-file-name nil)
-(global-set-key (kbd "<f8>") #'+eshell/toggle)
+(use-package! eshell
+  :config (progn (setq eshell-history-file-name nil)
+                 (global-set-key (kbd "<f5>") #'jpc/run-project-in-eshell)
+                 (global-set-key (kbd "<f6>") #'jpc/test-project-in-eshell)
+                 (global-set-key (kbd "<f7>") #'jpc/compile-project-in-eshell)
+                 (global-set-key (kbd "<f8>") #'+eshell/toggle)))
 
 ;; D language
 (add-hook 'd-mode-hook 'flycheck-dmd-dub-set-variables)

@@ -295,6 +295,19 @@
 ;; Faust language
 (add-to-list 'auto-mode-alist '("/faust/[^/]+\\.lib\\'" . faust-mode))
 
+;; LSP mode
+(eval-after-load 'lsp-mode
+  (setq lsp-auto-guess-root t))
+
+;; LSP clangs
+(setq lsp-clients-clangd-args '("-j=3"
+                                "--background-index"
+                                "--clang-tidy"
+                                "--completion-style=detailed"
+                                "--header-insertion=never"
+                                "--header-insertion-decorators=0"))
+(after! lsp-clangd (set-lsp-priority! 'clangd 2))
+
 ;; Date and time
 (defun jpc/insert-rfc-date ()
   "Insert the current date in RFC 5322 format."

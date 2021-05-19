@@ -13,6 +13,7 @@
 (package! diff-hl :disable t)
 (package! diredfl :disable t)
 (package! ws-butler :disable t)
+(package! doom-snippets :disable t)
 
 (package! flycheck-posframe)
 

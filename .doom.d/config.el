@@ -163,6 +163,16 @@
      (jpc/after-load-theme/all-the-icons-dired)
      (add-hook 'doom-load-theme-hook #'jpc/after-load-theme/all-the-icons-dired)))
 
+;; Theme for all-the-icons-ivy
+(defun jpc/after-load-theme/all-the-icons-ivy ()
+  (cl-case doom-theme
+    (tango-dark
+     (set-face-attribute 'all-the-icons-ivy-dir-face nil :foreground "goldenrod"))))
+(eval-after-load 'all-the-icons-ivy
+  '(progn
+     (jpc/after-load-theme/all-the-icons-ivy)
+     (add-hook 'doom-load-theme-hook #'jpc/after-load-theme/all-the-icons-ivy)))
+
 ;; Enable some functions
 (put 'downcase-region 'disabled nil)
 (put 'upcase-region 'disabled nil)
@@ -222,6 +232,10 @@
 ;; Dired-omit
 (eval-after-load 'dired-x
   '(setq dired-omit-files "^\\.$"))
+
+;; Ivy
+(require 'swiper)
+(define-key ivy-minibuffer-map (kbd "<return>") #'ivy-alt-done)
 
 ;; Compilation
 (setq compilation-read-command nil)

@@ -164,14 +164,18 @@
      (add-hook 'doom-load-theme-hook #'jpc/after-load-theme/all-the-icons-dired)))
 
 ;; Theme for all-the-icons-ivy
-(defun jpc/after-load-theme/all-the-icons-ivy ()
-  (cl-case doom-theme
-    (tango-dark
-     (set-face-attribute 'all-the-icons-ivy-dir-face nil :foreground "goldenrod"))))
-(eval-after-load 'all-the-icons-ivy
-  '(progn
-     (jpc/after-load-theme/all-the-icons-ivy)
-     (add-hook 'doom-load-theme-hook #'jpc/after-load-theme/all-the-icons-ivy)))
+;(defun jpc/after-load-theme/all-the-icons-ivy ()
+;  (cl-case doom-theme
+;    (tango-dark
+;     (set-face-attribute 'all-the-icons-ivy-dir-face nil :foreground "goldenrod"))))
+;(eval-after-load 'all-the-icons-ivy
+;  '(progn
+;     (jpc/after-load-theme/all-the-icons-ivy)
+;     (add-hook 'doom-load-theme-hook #'jpc/after-load-theme/all-the-icons-ivy)))
+
+;; All the icons ibuffer
+(use-package! all-the-icons-ibuffer
+  :init (all-the-icons-ibuffer-mode 1))
 
 ;; Enable some functions
 (put 'downcase-region 'disabled nil)
@@ -234,22 +238,23 @@
   '(setq dired-omit-files "^\\.$"))
 
 ;; Ivy
-(require 'swiper)
-(define-key ivy-minibuffer-map (kbd "<return>") #'ivy-alt-done)
+;(require 'swiper)
+;(define-key ivy-minibuffer-map (kbd "<return>") #'ivy-alt-done)
 
 ;; Compilation
 (setq compilation-read-command nil)
 
 ;; Projectile default commands
-(defun jpc/projectile-append-to-default-command (type command &rest strings)
-  (when-let* ((plist (alist-get type projectile-project-types))
-              (cmd (plist-get plist command)))
-    (plist-put plist command (apply #'concat cmd strings))))
-(eval-after-load 'projectile
-  '(let ((compile-jobs 3))
-     (jpc/projectile-append-to-default-command 'make 'compile-command " -j " (number-to-string compile-jobs))
-     (jpc/projectile-append-to-default-command 'cmake 'compile-command " -j " (number-to-string compile-jobs))
-     (jpc/projectile-append-to-default-command 'cmake 'test-command " -j " (number-to-string compile-jobs))))
+(when nil
+  (defun jpc/projectile-append-to-default-command (type command &rest strings)
+    (when-let* ((plist (alist-get type projectile-project-types))
+                (cmd (plist-get plist command)))
+      (plist-put plist command (apply #'concat cmd strings))))
+  (eval-after-load 'projectile
+    '(let ((compile-jobs 3))
+       (jpc/projectile-append-to-default-command 'make 'compile-command " -j " (number-to-string compile-jobs))
+       (jpc/projectile-append-to-default-command 'cmake 'compile-command " -j " (number-to-string compile-jobs))
+       (jpc/projectile-append-to-default-command 'cmake 'test-command " -j " (number-to-string compile-jobs)))))
 
 ;; Projectile/Eshell
 (defun jpc/create-shell-chain (&rest commands)
@@ -296,8 +301,11 @@
 (add-to-list 'auto-mode-alist '("/faust/[^/]+\\.lib\\'" . faust-mode))
 
 ;; LSP mode
-(eval-after-load 'lsp-mode
-  (setq lsp-auto-guess-root t))
+(after! lsp-mode
+  (setq lsp-auto-guess-root t)
+  (setq lsp-enable-snippet nil)
+  (setq lsp-enable-indentation nil)
+  (setq lsp-enable-on-type-formatting nil))
 
 ;; LSP clangs
 (setq lsp-clients-clangd-args '("-j=3"
@@ -307,6 +315,17 @@
                                 "--header-insertion=never"
                                 "--header-insertion-decorators=0"))
 (after! lsp-clangd (set-lsp-priority! 'clangd 2))
+
+;; Org mode
+(setq org-replace-disputed-keys t)
+(setq org-support-shift-select t)
+(after! org
+  ;; undefine some conflicting bindings
+  (define-key org-mode-map (kbd "<C-S-up>") nil)
+  (define-key org-mode-map (kbd "<C-S-down>") nil)
+  ;;
+  (setq org-hide-leading-stars nil
+        org-indent-mode-turns-on-hiding-stars nil))
 
 ;; Date and time
 (defun jpc/insert-rfc-date ()

@@ -17,7 +17,9 @@
 
 (package! flycheck-posframe)
 
-(package! smart-tab)
+(package! smart-tab
+  :recipe (:host github :repo "jpcima/smart-tab")
+  :pin "ce5fd640c8593f292a3674aa26152fa49692a848")
 (package! rainbow-identifiers)
 (package! spaceline)
 (package! spaceline-all-the-icons)
@@ -36,6 +38,8 @@
 (package! ttl-mode)
 (package! iss-mode)
 (package! sfz-mode)
+
+(package! all-the-icons-ibuffer)
 
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
 ;(package! some-package)

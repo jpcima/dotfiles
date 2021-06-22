@@ -90,6 +90,8 @@
                  (global-set-key (kbd "M-<down>") 'windmove-down)))
 
 ;; Company
+(after! company
+  (setq company-idle-delay nil))
 (add-hook 'company-mode-hook
           (lambda () (local-set-key (kbd "C-SPC") 'company-complete)))
 ;; Company box
@@ -303,7 +305,7 @@
 ;; LSP mode
 (after! lsp-mode
   (setq lsp-auto-guess-root t)
-  (setq lsp-enable-snippet nil)
+  ;(setq lsp-enable-snippet nil)
   (setq lsp-enable-indentation nil)
   (setq lsp-enable-on-type-formatting nil))
 

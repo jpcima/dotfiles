@@ -338,3 +338,7 @@
   "Insert the current date in ISO format."
   (interactive)
   (insert (string-trim (shell-command-to-string "env LANG=C date -u"))))
+
+;; Remove fringe
+(after! fringe
+  (fringe-mode '(0 . 0)))
